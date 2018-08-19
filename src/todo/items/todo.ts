@@ -233,18 +233,13 @@ class Todo extends Item {
 
       }
 
-      /* ELAPSED */
+      if ( started ) {
 
-      if ( Config.getKey ( 'timekeeping.elapsed.enabled' ) && started ) {
+        const now = new Date();
 
-        const startedFormat = Config.getKey ( 'timekeeping.started.format' ),
-              startedMoment = moment ( started, startedFormat ),
-              startedDate = new Date ( startedMoment.valueOf () ),
-              elapsedFormat = Config.getKey ( 'timekeeping.elapsed.format' ),
-              time = Utils.time.diff ( new Date (), startedDate, elapsedFormat ),
-              elapsedTag = `@${isPositive ? 'lasted' : 'wasted'}(${time})`;
+        this.elapsed(started, now, isPositive);
 
-        this.addTag ( elapsedTag );
+        this.deadline(now, isPositive);
 
       }
 
@@ -256,6 +251,61 @@ class Todo extends Item {
 
     this.removeTag ( Consts.regexes.tagFinished );
     this.removeTag ( Consts.regexes.tagElapsed );
+    this.removeTag ( Consts.regexes.tagDeadline );
+
+  }
+
+  elapsed(start: Date, end: Date, isPositive: boolean) {
+
+    const startedFormat = Config.getKey ( 'timekeeping.started.format' ),
+          startedMoment = moment ( start, startedFormat ),
+          startedDate = new Date ( startedMoment.valueOf () );
+
+    if ( Config.getKey ( 'timekeeping.elapsed.enabled' ) ) {
+
+      const elapsedFormat = Config.getKey ( 'timekeeping.elapsed.format' ),
+            time = Utils.time.diff ( end, startedDate, elapsedFormat ),
+            elapsedTag = `@${isPositive ? 'lasted' : 'wasted'}(${time})`;
+
+      this.addTag ( elapsedTag );
+
+    }
+
+  }
+
+  deadline(end: Date, isPositive: boolean) {
+
+    if ( Config.getKey ( 'timekeeping.deadline.enabled' ) ) {
+
+      if ( isPositive ) {
+
+        const deadline = this.getTag(Consts.regexes.tagDue);
+
+        if ( deadline ) {
+
+          const dueFormat = Config.getKey ( 'timekeeping.due.format' ),
+                deadlineFormat = Config.getKey ( 'timekeeping.deadline.format' ),
+                deadlineMoment = moment ( deadline, dueFormat ),
+                deadlineDate = new Date ( deadlineMoment.valueOf () ),
+                time = Utils.time.diff ( end, deadlineDate, deadlineFormat );
+
+          if ( time ) {
+
+            const deadlineTag = `@${end > deadlineDate ? 'overdue' : 'ontime'}(${time})`;
+
+            this.addTag ( deadlineTag );
+
+          }
+
+        }
+
+      } else {
+
+        this.removeTag(Consts.regexes.tagDeadline);
+
+      }
+
+    }
 
   }
 
@@ -347,6 +397,13 @@ class Todo extends Item {
 
   }
 
+  removeDeadline() {
+
+    this.removeTag ( Consts.regexes.tagDeadline );
+    this.removeTag ( Consts.regexes.tagDue );
+
+  }
+
   /* IS */
 
   isBox () {
@@ -370,6 +427,24 @@ class Todo extends Item {
   isFinished () {
 
     return this.isDone () || this.isCancelled ();
+
+  }
+
+  isDue () {
+
+    return Item.is(this.text, Consts.regexes.tagDue);
+
+  }
+
+  isOverdue () {
+
+    return Item.is(this.text, Consts.regexes.tagOverdue);
+
+  }
+
+  isOntime () {
+
+    return Item.is(this.text, Consts.regexes.tagOntime);
 
   }
 

@@ -4,7 +4,7 @@
 import * as _ from 'lodash';
 import Config from '../config';
 import Consts from '../consts';
-import {Comment, Project, Tag, TodoBox, TodoDone, TodoCancelled} from '../todo/items';
+import {Comment, Project, Tag, TodoBox, TodoDone, TodoCancelled, TodoDue, TodoOntime, TodoOverdue} from '../todo/items';
 import AST from './ast';
 import Time from './time';
 
@@ -164,7 +164,10 @@ const Statistics = {
         pending: 0,
         done: 0,
         cancelled: 0,
-        estSeconds: 0
+        estSeconds: 0,
+        due: 0,
+        overdue: 0,
+        ontime: 0
       };
 
       let wasPending = false;
@@ -199,6 +202,9 @@ const Statistics = {
             tokens.pending += nextTokens.pending;
             tokens.done += nextTokens.done;
             tokens.cancelled += nextTokens.cancelled;
+            tokens.due += nextTokens.due;
+            tokens.overdue += nextTokens.overdue;
+            tokens.ontime += nextTokens.ontime;
             tokens.estSeconds += nextTokens.estSeconds;
 
             i += nextTokens.comments + nextTokens.projects + nextTokens.tags + nextTokens.pending + nextTokens.done + nextTokens.cancelled; // Jumping
@@ -221,13 +227,28 @@ const Statistics = {
 
           }
 
+          if ( nextItem instanceof TodoOntime ) {
+
+            tokens.ontime++;
+
+          } else if ( nextItem instanceof TodoOverdue ) {
+
+            tokens.overdue++;
+
+          } else if ( nextItem instanceof TodoDue ) {
+
+            tokens.due++;
+          }
+
         }
 
       }
 
       tokens.finished = tokens.done + tokens.cancelled;
+      tokens.scheduled = tokens.due + tokens.ontime + tokens.overdue;
       tokens.all = tokens.pending + tokens.done + tokens.cancelled;
       tokens.percentage = tokens.all ? Math.round ( tokens.finished / tokens.all * 100 ) : 100;
+      tokens.deadline = tokens.scheduled ? Math.round ( ( tokens.ontime - tokens.overdue ) / tokens.scheduled * 100 ) : 100;
       tokens.est = tokens.estSeconds ? Time.diff ( Date.now () + ( tokens.estSeconds * 1000 ), undefined, Config.getKey ( 'timekeeping.estimate.format' ) ) : '';
 
       Statistics.tokens.projects[project.lineNumber] = tokens;

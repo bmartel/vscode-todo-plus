@@ -185,7 +185,9 @@
             "critical",
             "high",
             "low",
-            "today"
+            "today",
+            "overdue",
+            "ontime"
           ]
         },
         "todo.tags.namesInference": {
@@ -203,7 +205,9 @@
             "#e54545",
             "#e59f45",
             "#e5d145",
-            "#ae81ff"
+            "#ae81ff",
+            "#000000",
+            "#000000"
           ]
         },
         "todo.tags.foregroundColors": {
@@ -216,7 +220,9 @@
             "#000000",
             "#000000",
             "#000000",
-            "#000000"
+            "#000000",
+            "#e54545",
+            "#a6e22e"
           ]
         },
         "todo.archive.name": {
@@ -264,6 +270,27 @@
           "description": "Format used for displaying time inside @created",
           "default": "YY-MM-DD HH:mm"
         },
+        "todo.timekeeping.deadline.enabled": {
+          "type": "boolean",
+          "description": "Enable the @due/lapsed/ontime tags",
+          "default": true
+        },
+        "todo.timekeeping.deadline.format": {
+          "type": "string",
+          "enum": [
+            "long",
+            "short",
+            "short-compact",
+            "clock"
+          ],
+          "description": "Format used for displaying time diff inside @lapsed/ontime",
+          "default": "short-compact"
+        },
+        "todo.timekeeping.due.format": {
+          "type": "string",
+          "description": "Format used to parse the time inside @due",
+          "default": "YY-MM-DD HH:mm"
+        },
         "todo.timekeeping.started.time": {
           "type": "boolean",
           "description": "Insert the time inside the @started tag",
@@ -302,7 +329,7 @@
             "short-compact",
             "clock"
           ],
-          "description": "Format used for displaying time diff inside @lasted/waster",
+          "description": "Format used for displaying time diff inside @lasted/wasted",
           "default": "short-compact"
         },
         "todo.timekeeping.estimate.format": {
@@ -353,7 +380,7 @@
         "todo.statistics.project.text": {
           "type": "string",
           "description": "Template used for rendering the text",
-          "default": "([pending]) [est]"
+          "default": "([pending]) ([due]) [est]"
         },
         "todo.statistics.statusbar.enabled": {
           "type": [
@@ -562,6 +589,10 @@
         "title": "Todo: Toggle Timer"
       },
       {
+        "command": "todo.removeDeadline",
+        "title": "Todo: Remove Deadline"
+      },
+      {
         "command": "todo.archive",
         "title": "Todo: Archive"
       },
@@ -666,6 +697,11 @@
       {
         "command": "todo.toggleStart",
         "key": "Alt+s",
+        "when": "editorTextFocus && editorLangId == todo"
+      },
+      {
+        "command": "todo.removeDeadline",
+        "key": "Shift+Alt+d",
         "when": "editorTextFocus && editorLangId == todo"
       },
       {
