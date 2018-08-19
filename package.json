@@ -619,8 +619,8 @@
         "title": "Todo: Toggle Timer"
       },
       {
-        "command": "todo.removeDeadline",
-        "title": "Todo: Remove Deadline"
+        "command": "todo.toggleDeadline",
+        "title": "Todo: Toggle Deadline"
       },
       {
         "command": "todo.archive",
@@ -730,7 +730,7 @@
         "when": "editorTextFocus && editorLangId == todo"
       },
       {
-        "command": "todo.removeDeadline",
+        "command": "todo.toggleDeadline",
         "key": "Shift+Alt+d",
         "when": "editorTextFocus && editorLangId == todo"
       },

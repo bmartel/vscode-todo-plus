@@ -160,9 +160,9 @@ function toggleStart () {
 
 }
 
-function removeDeadline() {
+function toggleDeadline() {
 
-  return callTodosMethod('removeDeadline');
+  return callTodosMethod('toggleDeadline');
 
 }
 
@@ -273,4 +273,4 @@ function viewEmbeddedClearFilter () {
 
 /* EXPORT */
 
-export {open, openEmbedded, toggleBox, toggleDone, toggleCancelled, toggleStart, toggleTimer, removeDeadline, archive, viewOpenFile, viewRevealTodo, viewFilesOpen, viewFilesRefresh, viewFilesCollapse, viewFilesExpand, viewEmbeddedRefresh, viewEmbeddedCollapse, viewEmbeddedExpand, viewEmbeddedFilter, viewEmbeddedClearFilter};
+export {open, openEmbedded, toggleBox, toggleDone, toggleCancelled, toggleStart, toggleTimer, toggleDeadline, archive, viewOpenFile, viewRevealTodo, viewFilesOpen, viewFilesRefresh, viewFilesCollapse, viewFilesExpand, viewEmbeddedRefresh, viewEmbeddedCollapse, viewEmbeddedExpand, viewEmbeddedFilter, viewEmbeddedClearFilter};

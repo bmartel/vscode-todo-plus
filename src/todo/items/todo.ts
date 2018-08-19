@@ -397,10 +397,22 @@ class Todo extends Item {
 
   }
 
-  removeDeadline() {
+  toggleDeadline() {
 
-    this.removeTag ( Consts.regexes.tagDeadline );
-    this.removeTag ( Consts.regexes.tagDue );
+    if ( this.isDue() ) {
+
+      this.removeTag ( Consts.regexes.tagDeadline );
+      this.removeTag ( Consts.regexes.tagDue );
+
+    } else {
+
+      const due = moment().add(1, 'd').endOf('day'),
+            format = Config.getKey('timekeeping.due.format'),
+            deadline = due.format(format);
+
+      this.addTag(`@due(${deadline})`);
+
+    }
 
   }
 
