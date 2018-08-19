@@ -65,7 +65,7 @@ class Project extends Line {
 
     StatisticsTypes.reset ( textEditor );
 
-    const template = Config.getKey ( 'statistics.project.text' ),
+    const template = Config.getKey( 'statistics.project.text' ),
           basicRanges = [],
           statisticsData = [];
 
@@ -77,7 +77,7 @@ class Project extends Line {
 
       if ( withStatistics ) {
 
-        const contentText = Utils.statistics.template.render ( template, tokens ),
+        const contentText = Utils.statistics.template.render( this.applyTemplate(template, tokens), tokens ),
               type = StatisticsTypes.get ( contentText, textEditor );
 
         statisticsData.push ({ type, ranges });
@@ -100,6 +100,20 @@ class Project extends Line {
 
   }
 
+  applyTemplate( template: string, projectTokens: any ) {
+
+    /* DEADLINE */
+
+    if (!Utils.statistics.condition.is( Config.getKey( 'statistics.deadline.enabled' ), Utils.statistics.tokens.global, projectTokens ) )
+      template = template.replace( /\[due\]/, '' );
+
+    /* ESTIMATES */
+
+    if (!Utils.statistics.condition.is( Config.getKey( 'statistics.estimates.enabled' ), Utils.statistics.tokens.global, projectTokens ) )
+      template = template.replace( /\[est\]/, '' );
+
+    return template;
+  }
 }
 
 /* EXPORT */

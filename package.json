@@ -155,7 +155,7 @@
         "todo.colors.tag": {
           "type": "string",
           "description": "Tag color",
-          "default": "#e6db74"
+          "default": "#AD9F1F"
         },
         "todo.colors.types": {
           "type": "object",
@@ -186,8 +186,10 @@
             "high",
             "low",
             "today",
+            "due",
             "overdue",
-            "ontime"
+            "ontime",
+            "project"
           ]
         },
         "todo.tags.namesInference": {
@@ -206,8 +208,10 @@
             "#e59f45",
             "#e5d145",
             "#ae81ff",
-            "#000000",
-            "#000000"
+            "",
+            "",
+            "",
+            ""
           ]
         },
         "todo.tags.foregroundColors": {
@@ -221,8 +225,10 @@
             "#000000",
             "#000000",
             "#000000",
-            "#e54545",
-            "#a6e22e"
+            "#B36919",
+            "#B31919",
+            "#80B319",
+            "#139EB9"
           ]
         },
         "todo.archive.name": {
@@ -380,7 +386,23 @@
         "todo.statistics.project.text": {
           "type": "string",
           "description": "Template used for rendering the text",
-          "default": "([pending]) ([due]) [est]"
+          "default": "[[pending]] [due] [est]"
+        },
+        "todo.statistics.deadline.enabled": {
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "description": "Show deadline statistics within project text, boolean or JS expression",
+          "default": "project.due > 0"
+        },
+        "todo.statistics.estimates.enabled": {
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "description": "Show estimate statistics within project text, boolean or JS expression",
+          "default": "project.est"
         },
         "todo.statistics.statusbar.enabled": {
           "type": [
@@ -424,6 +446,14 @@
           "type": "string",
           "description": "Template used for rendering the tooltip",
           "default": "[pending] Pending - [done] Done - [cancelled] Cancelled"
+        },
+        "todo.statistics.token.templates": {
+          "type": "object",
+          "description": "Template used for rendering a specific token",
+          "default": {
+            "due": "📅 [due]",
+            "est": "⏱️ [est]"
+          }
         },
         "todo.embedded.regex": {
           "type": "string",
