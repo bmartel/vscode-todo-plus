@@ -51,7 +51,7 @@ const Archive = {
 
     for ( let transformation of Archive.transformations.order ) {
 
-      Archive.transformations[transformation]( archivableDoc, data );
+      Archive.transformations[transformation] ( archivableDoc, data );
 
     }
 

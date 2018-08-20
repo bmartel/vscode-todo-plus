@@ -81,7 +81,7 @@ const Providers = {
 /* PROVIDER */
 
 const provider = Config.get ().embedded.provider,
-      Provider: typeof JS | typeof AG | typeof RG = provider ? Providers[provider]() || Providers.javascript () : Providers.ag () || Providers.rg () || Providers.javascript ();
+      Provider: typeof JS | typeof AG | typeof RG = provider ? Providers[provider] () || Providers.javascript () : Providers.ag () || Providers.rg () || Providers.javascript ();
 
 /* EXPORT */
 

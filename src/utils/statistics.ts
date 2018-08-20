@@ -178,17 +178,17 @@ const Statistics = {
 
         if ( nextItem instanceof Tag ) {
 
-          if (TodoOntime.is(nextItem.text)) {
+          if ( TodoOntime.is ( nextItem.text ) ) {
 
             tokens.ontime++;
 
-          } else if (TodoOverdue.is(nextItem.text)) {
+          } else if ( TodoOverdue.is ( nextItem.text ) ) {
 
             tokens.overdue++;
 
-          } else if (TodoDue.is(nextItem.text)) {
+          } else if ( TodoDue.is ( nextItem.text ) ) {
 
-            if (!wasPending) continue;
+            if ( !wasPending ) continue;
 
             tokens.due++;
 
@@ -196,9 +196,9 @@ const Statistics = {
 
             tokens.tags++;
 
-            if (!wasPending) continue;
+            if ( !wasPending ) continue;
 
-            tokens.estSeconds += Statistics.estimate.parse(nextItem.text);
+            tokens.estSeconds += Statistics.estimate.parse ( nextItem.text) ;
 
           }
 
@@ -268,7 +268,7 @@ const Statistics = {
 
   template: {
 
-    tokensTemplate: Config.getKey('statistics.token.templates'), // Map of `token => tokenTemplate`
+    tokensTemplate: Config.getKey ( 'statistics.token.templates' ), // Map of `token => tokenTemplate`
 
     getTokenTemplate ( token ): string | null {
 
@@ -282,7 +282,7 @@ const Statistics = {
 
       if ( Statistics.template.tokensRe[token] ) return Statistics.template.tokensRe[token];
 
-      const re = new RegExp( `\\[${_.escapeRegExp(token)}\\]`, 'g' );
+      const re = new RegExp ( `\\[${_.escapeRegExp ( token ) }\\]`, 'g' );
 
       Statistics.template.tokensRe[token] = re;
 
@@ -298,11 +298,11 @@ const Statistics = {
 
         const re = Statistics.template.getTokenRe ( token );
 
-        const tokenTemplate = Statistics.template.getTokenTemplate( token );
+        const tokenTemplate = Statistics.template.getTokenTemplate ( token );
 
-        if ( tokenTemplate ) template = template.replace( re, tokenTemplate );
+        if ( tokenTemplate ) template = template.replace ( re, tokenTemplate );
 
-        template = template.replace( re, tokens[token] );
+        template = template.replace ( re, tokens[token] );
 
       }
 

@@ -233,16 +233,15 @@ class Todo extends Item {
 
       }
 
+      const now = new Date ();
+
       if ( started ) {
 
-        const now = new Date();
-
-        this.elapsed(started, now, isPositive);
-
-        this.deadline(now, isPositive);
+        this.elapsed ( started, now, isPositive );
 
       }
 
+      this.deadline ( now, isPositive );
     }
 
   }
@@ -255,7 +254,7 @@ class Todo extends Item {
 
   }
 
-  elapsed(start: Date, end: Date, isPositive: boolean) {
+  elapsed ( start: Date, end: Date, isPositive: boolean ) {
 
     const startedFormat = Config.getKey ( 'timekeeping.started.format' ),
           startedMoment = moment ( start, startedFormat ),
@@ -273,13 +272,13 @@ class Todo extends Item {
 
   }
 
-  deadline(end: Date, isPositive: boolean) {
+  deadline ( end: Date, isPositive: boolean ) {
 
     if ( Config.getKey ( 'timekeeping.deadline.enabled' ) ) {
 
       if ( isPositive ) {
 
-        const deadline = this.getTag(Consts.regexes.tagDue);
+        const deadline = this.getTag ( Consts.regexes.tagDue );
 
         if ( deadline ) {
 
@@ -301,7 +300,7 @@ class Todo extends Item {
 
       } else {
 
-        this.removeTag(Consts.regexes.tagDeadline);
+        this.removeTag ( Consts.regexes.tagDeadline );
 
       }
 
@@ -397,20 +396,20 @@ class Todo extends Item {
 
   }
 
-  toggleDeadline() {
+  toggleDeadline ( force: boolean = !this.isDue () ) {
 
-    if ( this.isDue() ) {
+    if ( force ) {
 
-      this.removeTag ( Consts.regexes.tagDeadline );
-      this.removeTag ( Consts.regexes.tagDue );
+      const due = moment ().add ( 1, 'd' ).endOf ( 'day' ),
+            format = Config.getKey ( 'timekeeping.due.format' ),
+            deadline = due.format ( format );
+
+      this.addTag ( `@due(${deadline})` );
 
     } else {
 
-      const due = moment().add(1, 'd').endOf('day'),
-            format = Config.getKey('timekeeping.due.format'),
-            deadline = due.format(format);
-
-      this.addTag(`@due(${deadline})`);
+      this.removeTag ( Consts.regexes.tagDeadline );
+      this.removeTag ( Consts.regexes.tagDue );
 
     }
 
@@ -444,19 +443,19 @@ class Todo extends Item {
 
   isDue () {
 
-    return Item.is(this.text, Consts.regexes.tagDue);
+    return Item.is ( this.text, Consts.regexes.tagDue );
 
   }
 
   isOverdue () {
 
-    return Item.is(this.text, Consts.regexes.tagOverdue);
+    return Item.is ( this.text, Consts.regexes.tagOverdue );
 
   }
 
   isOntime () {
 
-    return Item.is(this.text, Consts.regexes.tagOntime);
+    return Item.is ( this.text, Consts.regexes.tagOntime );
 
   }
 

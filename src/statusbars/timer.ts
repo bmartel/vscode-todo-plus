@@ -81,7 +81,7 @@ class Timer {
 
       if ( this.data.text === todo.text ) return false;
 
-      const startedTag = todo['getTag']( Consts.regexes.tagStarted ), //TSC
+      const startedTag = todo['getTag'] ( Consts.regexes.tagStarted ), //TSC
             startedFormat = this.config.timekeeping.started.format,
             startedMoment = moment ( startedTag, startedFormat ),
             startedMilliseconds = startedFormat.indexOf ( 's' ) >= 0 ? startedMoment.valueOf () : ( Math.floor ( startedMoment.valueOf () / 60000 ) * 60000 ) + ( Date.now () % 60000 ),// Syncing the seconds with the current time if they are not provided
@@ -105,7 +105,7 @@ class Timer {
         startedDate
       };
 
-      const estTag = todo['getTag']( Consts.regexes.tagEstimate ); //TSC
+      const estTag = todo['getTag'] ( Consts.regexes.tagEstimate ); //TSC
 
       if ( estTag ) {
 
@@ -164,7 +164,7 @@ class Timer {
 
     if ( this._setItemProp ( 'visibility', visibility ) ) {
 
-      this.item[visibility ? 'show' : 'hide']();
+      this.item[visibility ? 'show' : 'hide'] ();
 
     }
 

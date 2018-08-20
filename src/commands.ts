@@ -50,9 +50,9 @@ async function callTodosMethod ( options? ) {
 
   if ( !todosFiltered.length ) return;
 
-  todosFiltered.map ( todo => todo[options.method]( ...options.args ) );
+  todosFiltered.map ( todo => todo[options.method] ( ...options.args ) );
 
-  const edits = _.filter ( _.flattenDeep ( todosFiltered.map ( todo => todo['makeEdit']() ) ) );
+  const edits = _.filter ( _.flattenDeep ( todosFiltered.map ( todo => todo['makeEdit'] () ) ) );
 
   if ( !edits.length ) return;
 
@@ -160,9 +160,9 @@ function toggleStart () {
 
 }
 
-function toggleDeadline() {
+function toggleDeadline () {
 
-  return callTodosMethod('toggleDeadline');
+  return callTodosMethod ( 'toggleDeadline' );
 
 }
 

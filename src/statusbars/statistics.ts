@@ -106,7 +106,7 @@ class Statistics {
 
     if ( this._setItemProp ( 'visibility', visibility ) ) {
 
-      this.item[visibility ? 'show' : 'hide']();
+      this.item[visibility ? 'show' : 'hide'] ();
 
     }
 

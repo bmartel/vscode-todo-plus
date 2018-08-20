@@ -31,7 +31,7 @@ const Time = {
 
   diffLong ( to: Date, from: Date = new Date () ) {
 
-    return moment['preciseDiff']( from, to );
+    return moment['preciseDiff'] ( from, to );
 
   },
 
