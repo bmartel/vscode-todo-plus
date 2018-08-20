@@ -6,7 +6,7 @@ import stringMatches from 'string-matches';
 import * as vscode from 'vscode';
 import Consts from '../consts';
 import Utils from '../utils';
-import {Line, Archive, Comment, Formatted, Project, Tag, Todo, TodoBox, TodoDone, TodoCancelled, TodoDue, TodoOntime, TodoOverdue} from './items';
+import {Line, Archive, Comment, Formatted, Project, Tag, Todo, TodoBox, TodoDone, TodoCancelled} from './items';
 
 /* DOCUMENT */
 
@@ -56,10 +56,7 @@ class Document {
       | typeof Todo
       | typeof TodoBox
       | typeof TodoDone
-      | typeof TodoCancelled
-      | typeof TodoDue
-      | typeof TodoOntime
-      | typeof TodoOverdue,
+      | typeof TodoCancelled,
     regex: RegExp
   ) {
     const matchText = _.isString ( this.text )
@@ -83,10 +80,7 @@ class Document {
       | typeof Todo
       | typeof TodoBox
       | typeof TodoDone
-      | typeof TodoCancelled
-      | typeof TodoDue
-      | typeof TodoOntime
-      | typeof TodoOverdue,
+      | typeof TodoCancelled,
     lineNumber: number,
     checkValidity = true
   ) {
@@ -169,30 +163,6 @@ class Document {
 
   getTodoCancelledAt ( lineNumber: number, checkValidity? ) {
     return this.getItemAt ( TodoCancelled, lineNumber, checkValidity );
-  }
-
-  getTodosDue () {
-    return this.getItems ( TodoDue, Consts.regexes.tagDue );
-  }
-
-  getTodoDueAt ( lineNumber: number, checkValidity? ) {
-    return this.getItemAt ( TodoDue, lineNumber, checkValidity );
-  }
-
-  getTodosOntime () {
-    return this.getItems ( TodoOntime, Consts.regexes.tagOntime );
-  }
-
-  getTodoOntimeAt ( lineNumber: number, checkValidity? ) {
-    return this.getItemAt ( TodoOntime, lineNumber, checkValidity );
-  }
-
-  getTodosOverdue () {
-    return this.getItems ( TodoOverdue, Consts.regexes.tagOverdue );
-  }
-
-  getTodoOverdueAt ( lineNumber: number, checkValidity? ) {
-    return this.getItemAt ( TodoOverdue, lineNumber, checkValidity );
   }
 
   /* IS */

@@ -4,7 +4,7 @@
 import * as _ from 'lodash';
 import Config from '../config';
 import Consts from '../consts';
-import {Comment, Project, Tag, TodoBox, TodoDone, TodoCancelled, TodoDue, TodoOntime, TodoOverdue} from '../todo/items';
+import {Comment, Project, Tag, TodoBox, TodoDone, TodoCancelled} from '../todo/items';
 import AST from './ast';
 import Time from './time';
 
@@ -178,15 +178,15 @@ const Statistics = {
 
         if ( nextItem instanceof Tag ) {
 
-          if ( TodoOntime.is ( nextItem.text ) ) {
+          if ( nextItem.isOntime () ) {
 
             tokens.ontime++;
 
-          } else if ( TodoOverdue.is ( nextItem.text ) ) {
+          } else if ( nextItem.isOverdue () ) {
 
             tokens.overdue++;
 
-          } else if ( TodoDue.is ( nextItem.text ) ) {
+          } else if ( nextItem.isDue () ) {
 
             if ( !wasPending ) continue;
 
@@ -198,7 +198,7 @@ const Statistics = {
 
             if ( !wasPending ) continue;
 
-            tokens.estSeconds += Statistics.estimate.parse ( nextItem.text) ;
+            tokens.estSeconds += Statistics.estimate.parse ( nextItem.text ) ;
 
           }
 

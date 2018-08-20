@@ -20,6 +20,30 @@ class Tag extends Item {
 
   }
 
+  isDue () {
+
+    return Item.is ( this.text, Consts.regexes.tagDue );
+
+  }
+
+  isOverdue () {
+
+    return Item.is ( this.text, Consts.regexes.tagOverdue );
+
+  }
+
+  isOntime () {
+
+    return Item.is ( this.text, Consts.regexes.tagOntime );
+
+  }
+
+  isDeadline () {
+
+    return Item.is ( this.text, Consts.regexes.tagDeadline );
+
+  }
+
   static is ( str: string ) {
 
     return super.is ( str, Consts.regexes.tag );
