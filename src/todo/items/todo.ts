@@ -241,16 +241,16 @@ class Todo extends Item {
 
       }
 
-      this.deadline ( now, isPositive );
+      this.deadline( isPositive, now );
     }
 
   }
 
   unfinish () {
 
+    this.deadline( false );
     this.removeTag ( Consts.regexes.tagFinished );
     this.removeTag ( Consts.regexes.tagElapsed );
-    this.removeTag ( Consts.regexes.tagDeadline );
 
   }
 
@@ -272,27 +272,27 @@ class Todo extends Item {
 
   }
 
-  deadline ( end: Date, isPositive: boolean ) {
+  deadline( isPositive: boolean, end: Date = new Date () ) {
 
     if ( Config.getKey ( 'timekeeping.deadline.enabled' ) ) {
 
       if ( isPositive ) {
 
-        const deadline = this.getTag ( Consts.regexes.tagDue );
+        const due = this.getTag ( Consts.regexes.tagDue );
 
-        if ( deadline ) {
+        if ( due ) {
 
           const dueFormat = Config.getKey ( 'timekeeping.due.format' ),
                 deadlineFormat = Config.getKey ( 'timekeeping.deadline.format' ),
-                deadlineMoment = moment ( deadline, dueFormat ),
-                deadlineDate = new Date ( deadlineMoment.valueOf () ),
-                time = Utils.time.diff ( end, deadlineDate, deadlineFormat );
+                dueMoment = moment ( due, dueFormat ),
+                dueDate = new Date ( dueMoment.valueOf () ),
+                time = Utils.time.diff ( end, dueDate, deadlineFormat );
 
           if ( time ) {
 
-            const deadlineTag = `@${end > deadlineDate ? 'overdue' : 'ontime'}(${time})`;
+            const deadlineTag = `@${end > dueDate ? 'overdue' : 'ontime'}(${time})`;
 
-            this.addTag ( deadlineTag );
+            this.replaceTag ( Consts.regexes.tagDue, deadlineTag );
 
           }
 
@@ -300,7 +300,19 @@ class Todo extends Item {
 
       } else {
 
-        this.removeTag ( Consts.regexes.tagDeadline );
+        if ( this.isDone () && this.isDeadline () ) {
+
+          const deadline = this.getTag ( Consts.regexes.tagDeadline ),
+            finished = this.getTag ( Consts.regexes.tagFinished ),
+            finishedFormat = Config.getKey ( 'timekeeping.finished.format' ),
+            finishedMoment = moment ( finished, finishedFormat ),
+            finishedDate = new Date ( finishedMoment.valueOf () ),
+            dueFormat = Config.getKey ( 'timekeeping.due.format' ),
+            dueDate = moment( Utils.time.fromDiff ( deadline, finishedDate ).valueOf () );
+
+          this.replaceTag ( Consts.regexes.tagDeadline, `@due(${dueDate.format(dueFormat)})` );
+
+        }
 
       }
 
@@ -400,11 +412,15 @@ class Todo extends Item {
 
     if ( force ) {
 
-      const due = moment ().add ( 1, 'd' ).endOf ( 'day' ),
-            format = Config.getKey ( 'timekeeping.due.format' ),
-            deadline = due.format ( format );
+      if ( ! this.isDeadline () ) {
 
-      this.addTag ( `@due(${deadline})` );
+        const due = moment ().add ( 1, 'd' ).endOf ( 'day' ),
+              format = Config.getKey ( 'timekeeping.due.format' ),
+              deadline = due.format ( format );
+
+        this.addTag ( `@due(${deadline})` );
+
+      }
 
     } else {
 
@@ -456,6 +472,12 @@ class Todo extends Item {
   isOntime () {
 
     return Item.is ( this.text, Consts.regexes.tagOntime );
+
+  }
+
+  isDeadline () {
+
+    return Item.is ( this.text, Consts.regexes.tagDeadline );
 
   }
 

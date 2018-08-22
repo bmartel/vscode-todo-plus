@@ -10,6 +10,24 @@ import * as toTime from 'to-time';
 
 const sugar = require ( 'sugar-date' ); //TSC
 
+const timeSections: [string, number][] = [
+  ['y', 31536000],
+  ['w', 604800],
+  ['d', 86400],
+  ['h', 3600],
+  ['m', 60],
+  ['s', 1]
+];
+
+const timeTokens = {
+  y: 31536000,
+  w: 604800,
+  d: 86400,
+  h: 3600,
+  m: 60,
+  s: 1
+}
+
 /* TIME */
 
 const Time = {
@@ -44,16 +62,7 @@ const Time = {
     let remaining = secondsAbs,
         parts = [];
 
-    const sections: [string, number][] = [
-      ['y', 31536000 ],
-      ['w', 604800 ],
-      ['d', 86400 ],
-      ['h', 3600 ],
-      ['m', 60 ],
-      ['s', 1 ]
-    ];
-
-    sections.forEach ( ([ token, seconds ]) => {
+    timeSections.forEach ( ([ token, seconds ]) => {
 
       const times = Math.floor ( remaining / seconds );
 
@@ -154,6 +163,21 @@ const Time = {
 
     return toDate ? Math.round ( ( toDate.getTime () - from.getTime () ) / 1000 ) : 0;
 
+  },
+
+  fromDiff ( diff: string, to: Date = new Date () ): Date {
+
+    const polarity = diff.indexOf (' -' ) !== -1 ? -1 : 1;
+    const tokens = diff.match ( /(\d+)(ms|s|m|h|d|w|y)/gi );
+    let seconds = 0;
+
+    tokens.forEach( ( timeToken ) => {
+      const [ time, token ] = timeToken.match ( /[0-9]+|[a-z]+/g );
+
+      seconds += parseInt ( time, 10 ) * timeTokens[token];
+    });
+
+    return new Date ( to.getTime () + ( polarity * seconds * 1000 ) );
   }
 
 };

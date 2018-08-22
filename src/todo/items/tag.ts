@@ -38,12 +38,6 @@ class Tag extends Item {
 
   }
 
-  isDeadline () {
-
-    return Item.is ( this.text, Consts.regexes.tagDeadline );
-
-  }
-
   static is ( str: string ) {
 
     return super.is ( str, Consts.regexes.tag );
